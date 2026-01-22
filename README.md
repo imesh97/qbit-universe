@@ -29,6 +29,8 @@ python3 tests/melinda.py
 
 ## Running your first simulation
 
+### Code
+
 ```python
 from qbitUni import QbitUni
 
@@ -54,4 +56,10 @@ print(f"Prob of |11>: {univ.get_prob(3):.2f}")
 # Measuring will force the universe into a single classical state
 result = univ.measure()
 print(f"Final Measurement: {result:02b}")
+```
+
+### Execution
+
+```bash
+python3 script.py
 ```

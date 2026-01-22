@@ -1,6 +1,12 @@
-# Qbit — Quantum Universe Simulator
+# qbitUni — Quantum Universe Simulator
 
 s/o Gemini....
+
+# Installation
+
+```bash
+git clone https://github.com/imesh/qbit-universe.git
+```
 
 # Setup
 
@@ -9,16 +15,16 @@ s/o Gemini....
 _Create and run a virtual environment_
 
 ```bash
-python3 -m venv venv  # Create
-source venv/bin/activate  # Activate
-pip install -r requirements.txt  # Dependencies
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
 # Tests
 
 ```bash
-python3 tests/gates.py  # Run gate test
-python3 tests/melinda.py  # Run 2nd test suite
+python3 tests/gates.py
+python3 tests/melinda.py
 ```
 
 ## Running your first simulation

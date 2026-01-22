@@ -60,6 +60,20 @@ static PyObject* Py_cnot(PyQuantumUniverse *self, PyObject *args) {
     Py_RETURN_NONE;
 }
 
+static PyObject* Py_x(PyQuantumUniverse *self, PyObject *args) {
+    int target;
+    if (!PyArg_ParseTuple(args, "i", &target)) return NULL;
+    apply_x(self->univ, target);
+    Py_RETURN_NONE;
+}
+
+static PyObject* Py_y(PyQuantumUniverse *self, PyObject *args) {
+    int target;
+    if (!PyArg_ParseTuple(args, "i", &target)) return NULL;
+    apply_y(self->univ, target);
+    Py_RETURN_NONE;
+}
+
 // 5. Data Retrieval Methods (Fixes your Test Error)
 static PyObject* Py_get_amplitude(PyQuantumUniverse *self, PyObject *args) {
     long long index;
@@ -89,10 +103,12 @@ static PyObject* Py_measure(PyQuantumUniverse *self) {
 
 // 6. Method Table
 static PyMethodDef PyQuantumUniverse_methods[] = {
-    {"h", (PyCFunction)Py_h, METH_VARARGS, "Apply Hadamard gate to target qubit"},
-    {"z", (PyCFunction)Py_z, METH_VARARGS, "Apply Z (Phase Flip) gate"},
-    {"s", (PyCFunction)Py_s, METH_VARARGS, "Apply S (PI/2 Phase) gate"},
+    {"h", (PyCFunction)Py_h, METH_VARARGS, "Apply Hadamard gate (Superposition)"},
+    {"z", (PyCFunction)Py_z, METH_VARARGS, "Apply Pauli-Z gate (Phase Flip)"},
+    {"s", (PyCFunction)Py_s, METH_VARARGS, "Apply S gate (PI/2 Phase)"},
     {"cnot", (PyCFunction)Py_cnot, METH_VARARGS, "Apply CNOT gate (control, target)"},
+    {"x", (PyCFunction)Py_x, METH_VARARGS, "Apply Pauli-X gate (NOT)"},
+    {"y", (PyCFunction)Py_y, METH_VARARGS, "Apply Pauli-Y gate (Complex Swap)"},
     {"get_amplitude", (PyCFunction)Py_get_amplitude, METH_VARARGS, "Get complex amplitude at index"},
     {"get_prob", (PyCFunction)Py_get_prob, METH_VARARGS, "Get probability at index"},
     {"measure", (PyCFunction)Py_measure, METH_NOARGS, "Collapse and measure the universe"},

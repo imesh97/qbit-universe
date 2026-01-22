@@ -68,3 +68,38 @@ void apply_s(Universe *u, int target) {
     }
 }
 
+void apply_x(Universe *u, int target) {
+    long long bit = 1LL << target;
+
+    for (long long i = 0; i < u->dim; i++) {
+        // We iterate through all states.
+        // To avoid double-swapping, we only act when the target bit is 0.
+        if (!(i & bit)) {
+            long long j = i | bit; // The partner state (where target is 1)
+
+            // SWAP the amplitudes
+            double complex temp = u->psi[i];
+            u->psi[i] = u->psi[j];
+            u->psi[j] = temp;
+        }
+    }
+}
+
+void apply_y(Universe *u, int target) {
+    long long bit = 1LL << target;
+    
+    for (long long i = 0; i < u->dim; i++) {
+        if (!(i & bit)) {
+            long long j = i | bit;
+
+            double complex v0 = u->psi[i];
+            double complex v1 = u->psi[j];
+
+            // 1. Swap
+            // 2. Multiply v1 by -i (which is -I in C)
+            // 3. Multiply v0 by i  (which is I in C)
+            u->psi[i] = -I * v1;
+            u->psi[j] =  I * v0;
+        }
+    }
+}

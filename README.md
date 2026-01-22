@@ -24,7 +24,7 @@ python3 tests/melinda.py  # Run 2nd test suite
 ## Running your first simulation
 
 ```python
-from qbit import QbitUni
+from qbitUni import QbitUni
 
 # ⚡ Initialize a 2-qubit Universe
 # This allocates the state vector in C memory

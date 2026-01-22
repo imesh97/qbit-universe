@@ -3,7 +3,7 @@
 #                   ~imesh
 #########################
 
-from qbitUni import QbitUni
+from qbitUni import QuantumUniverse
 import numpy as np
 
 def format_state(univ, n_qubits):
@@ -19,7 +19,7 @@ def format_state(univ, n_qubits):
 
 def test_hadamard_reversibility():
     print("--- AUDIT 1: Hadamard Reversibility (H² = I) ---")
-    univ = QbitUni(1)
+    univ = QuantumUniverse(1)
     
     print(f"  t=0 (Start):       {format_state(univ, 1)}")
     
@@ -35,7 +35,7 @@ def test_hadamard_reversibility():
 
 def test_entanglement_logic():
     print("\n--- AUDIT 2: Bell State Creation (|00> + |11>) ---")
-    univ = QbitUni(2)
+    univ = QuantumUniverse(2)
     
     print(f"  t=0 (Vacuum):      {format_state(univ, 2)}")
     

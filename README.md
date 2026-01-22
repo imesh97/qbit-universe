@@ -32,11 +32,11 @@ python3 tests/melinda.py
 ### Code
 
 ```python
-from qbitUni import QbitUni
+from qbitUni import QuantumUniverse
 
 # ⚡ Initialize a 2-qubit Universe
 # This allocates the state vector in C memory
-univ = QbitUni(2)
+univ = QuantumUniverse(2)
 
 # ⊹ Apply a Hadamard gate to Qubit 0
 # This puts Qubit 0 into a 50/50 superposition of |0> and |1>

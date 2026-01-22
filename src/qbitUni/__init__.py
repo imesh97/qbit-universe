@@ -1,3 +1,3 @@
-from .simulator import QbitUni
+from ._engine import QuantumUniverse
 
-__all__ = ['QbitUni']
+__all__ = ['QuantumUniverse']

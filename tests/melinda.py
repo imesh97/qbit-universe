@@ -3,7 +3,7 @@
 #                ~nimsitha
 #########################
 
-from qbitUni import QbitUni
+from qbitUni import QuantumUniverse
 import time
 
 def format_state(univ, n):
@@ -21,7 +21,7 @@ def test_bell_state():
     print("Logic: Qubits 0 and 1 should always be the same (00 or 11)")
     
     # Audit a single state transformation first
-    audit_sim = QbitUni(2)
+    audit_sim = QuantumUniverse(2)
     audit_sim.h(0)
     audit_sim.cnot(0, 1)
     print(f"  Audit Math: {format_state(audit_sim, 2)}")
@@ -29,7 +29,7 @@ def test_bell_state():
     counts = {"00": 0, "11": 0, "Errors": 0}
     for _ in range(100):
         # We re-run the circuit to simulate 100 'shots'
-        s = QbitUni(2)
+        s = QuantumUniverse(2)
         s.h(0)
         s.cnot(0, 1)
         res = f"{s.measure():02b}"
@@ -45,7 +45,7 @@ def test_bell_state():
 def test_interference():
     print("\n--- TEST 2: Quantum Interference (H-Z-H) ---")
     print("Logic: H -> Z -> H should turn |0> into |1> with 100% certainty")
-    sim = QbitUni(1)
+    sim = QuantumUniverse(1)
     
     sim.h(0)
     print(f"  After H:   {format_state(sim, 1)}")
@@ -64,7 +64,7 @@ def test_interference():
 def test_phase_rotation():
     print("\n--- TEST 3: S-Gate (90-degree) Rotation ---")
     print("Logic: H -> S should create a state with a 0.707i imaginary amplitude")
-    sim = QbitUni(1)
+    sim = QuantumUniverse(1)
     sim.h(0)
     
     print(f"  Before S: {format_state(sim, 1)}")
@@ -89,7 +89,7 @@ def test_large_scaling():
     try:
         # Benchmark Allocation
         start_alloc = time.perf_counter()
-        sim = QbitUni(n)
+        sim = QuantumUniverse(n)
         end_alloc = time.perf_counter()
         print(f"  [TIME] Allocation: {(end_alloc - start_alloc)*1000:.2f}ms")
 

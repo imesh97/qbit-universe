@@ -5,7 +5,7 @@ s/o Gemini....
 # Installation
 
 ```bash
-git clone https://github.com/imesh/qbit-universe.git
+git clone https://github.com/imesh97/qbit-universe.git
 ```
 
 # Setup

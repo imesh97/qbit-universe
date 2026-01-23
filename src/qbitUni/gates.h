@@ -9,5 +9,6 @@ void apply_z(Universe *u, int target);
 void apply_s(Universe *u, int target);
 void apply_x(Universe *u, int target);
 void apply_y(Universe *u, int target);
+void apply_t(Universe *u, int target);
 
 #endif

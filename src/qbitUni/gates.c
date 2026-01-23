@@ -8,6 +8,7 @@ extern void kernel_x(Universe *u, int target, int control, long long start, long
 extern void kernel_y(Universe *u, int target, int control, long long start, long long end);
 extern void kernel_z(Universe *u, int target, int control, long long start, long long end);
 extern void kernel_s(Universe *u, int target, int control, long long start, long long end);
+extern void kernel_t(Universe *u, int target, int control, long long start, long long end); 
 extern void kernel_cnot(Universe *u, int target, int control, long long start, long long end);
 
 // --- PUBLIC API ---
@@ -29,6 +30,10 @@ void apply_z(Universe *u, int target) {
 
 void apply_s(Universe *u, int target) {
     dispatch_parallel(u, kernel_s, target, -1);
+}
+
+void apply_t(Universe *u, int target) {
+    dispatch_parallel(u, kernel_t, target, -1);
 }
 
 void apply_cnot(Universe *u, int control, int target) {

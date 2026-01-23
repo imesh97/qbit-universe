@@ -77,6 +77,21 @@ void kernel_s(Universe *u, int target, int control, long long start, long long e
     }
 }
 
+void kernel_t(Universe *u, int target, int control, long long start, long long end) {
+    long long bit = 1LL << target;
+    
+    // Pre-calculate the complex constant for 45 degrees
+    // 0.70710678 + 0.70710678i
+    double complex phase = cexp(I * M_PI / 4.0); // e^(iπ/4)
+
+    for (long long i = start; i < end; i++) {
+        // Apply only if the qubit is |1>
+        if (i & bit) {
+            u->psi[i] *= phase;
+        }
+    }
+}
+
 void kernel_cnot(Universe *u, int target, int control, long long start, long long end) {
     long long ctrl_bit = 1LL << control;
     long long targ_bit = 1LL << target;

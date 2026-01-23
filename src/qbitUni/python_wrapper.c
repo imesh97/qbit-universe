@@ -75,6 +75,13 @@ static PyObject* Py_y(PyQuantumUniverse *self, PyObject *args) {
     Py_RETURN_NONE;
 }
 
+static PyObject* Py_t(PyQuantumUniverse *self, PyObject *args) {
+    int target;
+    if (!PyArg_ParseTuple(args, "i", &target)) return NULL;
+    apply_t(self->univ, target);
+    Py_RETURN_NONE;
+}
+
 // 5. Data Retrieval Methods
 static PyObject* Py_get_amplitude(PyQuantumUniverse *self, PyObject *args) {
     long long index;
@@ -112,6 +119,7 @@ static PyMethodDef PyQuantumUniverse_methods[] = {
     {"h", (PyCFunction)Py_h, METH_VARARGS, "Apply Hadamard gate (Superposition)"},
     {"z", (PyCFunction)Py_z, METH_VARARGS, "Apply Pauli-Z gate (Phase Flip)"},
     {"s", (PyCFunction)Py_s, METH_VARARGS, "Apply S gate (PI/2 Phase)"},
+    {"t", (PyCFunction)Py_t, METH_VARARGS, "Apply T gate (PI/4 Phase)"},
     {"cnot", (PyCFunction)Py_cnot, METH_VARARGS, "Apply CNOT gate (control, target)"},
     {"x", (PyCFunction)Py_x, METH_VARARGS, "Apply Pauli-X gate (NOT)"},
     {"y", (PyCFunction)Py_y, METH_VARARGS, "Apply Pauli-Y gate (Complex Swap)"},

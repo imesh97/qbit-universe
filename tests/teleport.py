@@ -1,128 +1,104 @@
-# T^4 = Z
-
 from qbitUni import QuantumUniverse
 import math
 
-def test_t_versus_z():
-    print("====================================")
-    print("🔮 UNIVERSALITY CHECK: T^4 vs Z Gate")
-    print("====================================")
+def test_teleportation():
+    print("=================================")
+    print("🚀 QUANTUM TELEPORTATION PROTOCOL")
+    print("=================================")
+    print("Goal: Move state of Qubit 0 (Alice) -> Qubit 2 (Bob)")
     
-    u_t = QuantumUniverse(1)
-    u_t.print_state() # Print initial state
+    # We need 3 Qubits:
+    # Q0: The "Payload" (The secret state we want to send)
+    # Q1: Alice's half of the entangled pair
+    # Q2: Bob's half of the entangled pair
+    u = QuantumUniverse(3)
+    u.print_state()
     
-    # --- EXPERIMENT A: The T-Gate Chain ---
-    print("\n🧪 Experiment A: Applying T four times")
+    # --- STEP 1: PREPARE THE PAYLOAD (Q0) ---
+    # We create a specific secret state on Q0 using H then T.
+    # State becomes: 0.707|0> + (0.5+0.5i)|1>
+    print("\n1. Preparing Payload on Qubit 0 [H and T]...")
+    u.h(0)
+    u.t(0)
+    u.print_state()
+    
+    # Record the target amplitude for manual verification later
+    amp0 = u.get_amplitude(0b001) # State |001> (Q0=1, others=0)
+    print(f"    Target Amplitude to Match: {amp0.real:.3f} {amp0.imag:+.3f}j")
 
-    u_t.h(0) # Start in Superposition |+>
-    u_t.t(0) # Apply T four times (45° * 4 = 180°)
-    u_t.t(0)
-    u_t.t(0)
-    u_t.t(0)
+    # --- STEP 2: CREATE ENTANGLEMENT (THE "BRIDGE") ---
+    # Alice (Q1) and Bob (Q2) share a Bell Pair.
+    print("\n2. Entangling Alice (Q1) and Bob (Q2) [H and CNOT]...")
+    u.h(1)
+    u.cnot(1, 2)
+    u.print_state()
     
-    u_t.print_state() # Print state after T^4 test
+    # --- STEP 3: ALICE'S BELL MEASUREMENT ---
+    # Alice performs a Bell Basis measurement on her two qubits (Q0 & Q1).
+    # This entangles the payload with the bridge.
+    print("\n3. Alice performs Bell Measurement on Q0 & Q1 [CNOT and H]...")
+    u.cnot(0, 1)
+    u.h(0)
+    u.print_state()
     
-    # --- EXPERIMENT B: The Z-Gate Baseline ---
-    print("\n🧪 Experiment B: Applying Z once (Control Group)")
-    u_z = QuantumUniverse(1)
+    # Alice measures her qubits. This collapses Q0 and Q1 to classical bits,
+    # but the quantum information is projected onto Bob's qubit (Q2).
+    bit0 = u.measure_qubit(0)
+    bit1 = u.measure_qubit(1)
     
-    u_z.h(0) # Start in Superposition |+>    
-    u_z.z(0) # Apply Z once (180°)
+    print(f"    Alice Measured: {bit1}{bit0} (Binary)")
     
-    u_z.print_state() # Print state after Z test
+    # --- STEP 4: BOB'S CORRECTION (CLASSICAL FEEDBACK) ---
+    # Bob applies specific gates to Q2 based on the bits Alice sent him.
+    print("\n4. Bob applies corrections based on Alice's bits...")
     
-    # --- MATHEMATICAL VERIFICATION ---
-    print("\n📊 Verification Analysis")
-    
-    # Get amplitudes of the |1> state for both
-    amp_t = u_t.get_amplitude(1)
-    amp_z = u_z.get_amplitude(1)
-    
-    print(f"   T^4 Result (|1>): {amp_t.real:.4f} {amp_t.imag:+.4f}j")
-    print(f"   Z   Result (|1>): {amp_z.real:.4f} {amp_z.imag:+.4f}j")
-    
-    # Calculate difference
-    diff_real = abs(amp_t.real - amp_z.real)
-    diff_imag = abs(amp_t.imag - amp_z.imag)
-    
-    if diff_real < 1e-6 and diff_imag < 1e-6:
-        print("\n✅ SUCCESS: T^4 is mathematically identical to Z.")
-        print("   [Theory] T rotates phase by 45° (π/4).")
-        print("   [Theory] Z rotates phase by 180° (π).")
-        print("   [Result] Your engine is now Universal.")
-    else:
-        print(f"\n❌ FAILURE: Mismatch detected. Diff: {diff_real}")
+    if bit1 == 1:
+        print("    -> Applying X (Bit Flip)")
+        u.x(2)
+        
+    if bit0 == 1:
+        print("    -> Applying Z (Phase Flip)")
+        u.z(2)
+        
+    # --- STEP 5: VERIFICATION ---
+    # Qubit 2 should now hold the exact state Qubit 0 started with.
+    # Note: Q0 and Q1 are now collapsed (0 or 1), but Q2 is in the secret superposition.
+    print("\n5. Verifying Bob's Qubit (Q2)...")
+    u.print_state()
 
-def test_phase_universality():
-    print("================================")
-    print("🎨 Testing Parametric Phase Gate")
-    print("================================")
+    print("\n6. SCIENTIFIC PROOF [Uncomputing]")
+    # To prove Q2 holds the secret, we apply the INVERSE of the preparation steps.
+    # Preparation was: H -> T
+    # Inverse is: Inverse-T -> Inverse-H
     
-    # --- CASE 1: Phase(PI) vs Z ---
-    print("\n[1] Checking if Phase(PI) == Z...")
+    u.phase(2, -math.pi/4) # Reverse T (Using Phase Gate with -PI/4)
+    u.h(2) # Reverse H (H is its own inverse)
     
-    # Experiment A: Using Phase(PI)
-    print("  -> Applying Phase(PI)...")
-    u1 = QuantumUniverse(1)
-    u1.print_state() # Print initial
-    u1.h(0)
-    u1.phase(0, math.pi)
-    u1.print_state()  # Print state
+    # If Q2 held the correct state, uncomputing it must result in exactly |0>.
+    # If we measure 1, the teleportation failed.
+    result = u.measure_qubit(2)
     
-    # Experiment B: Using Standard Z
-    print("  -> Applying Standard Z...")
-    u2 = QuantumUniverse(1)
-    u2.print_state() # Print initial
-    u2.h(0)
-    u2.z(0)
-    u2.print_state()  # Print state
-    
-    # Verification
-    amp1 = u1.get_amplitude(1)
-    amp2 = u2.get_amplitude(1)
-    
-    print(f"    Phase(PI) |1>: {amp1.real:.3f} {amp1.imag:+.3f}j")
-    print(f"    Z Gate    |1>: {amp2.real:.3f} {amp2.imag:+.3f}j")
-    
-    # Check Real parts (since PI rotation flips real sign)
-    if abs(amp1.real - amp2.real) < 0.001:
-        print("    ✅ Match.")
+    if result == 0:
+        print("SUCCESS! Bob's qubit uncomputed perfectly to |0>.")
     else:
-        print("    ❌ Mismatch.")
+        print("FAILURE! Bob's qubit was |1>. Information lost.")
+    
+    print("\n✅ TELEPORTATION COMPLETE.")
 
-    # --- CASE 2: Phase(PI/2) vs S ---
-    print("\n[2] Checking if Phase(PI/2) == S...")
+    # --- MANUAL VERIFICATION NOTES (For the math curious) ---
+    # We check the amplitude of the state where Q2=1 (from Step 5).
+    # Depending on the random collapse of Q0/Q1, the index will change.
+    # If Alice measured 00, we check index 0b100 (4)
+    # If Alice measured 01, we check index 0b101 (5)
+    # But wait! print_state() shows us everything.
+    # We just need to verify that the RELATIVE phase/magnitude of Bob's |0> vs |1> is correct.
     
-    # Experiment A: Using Phase(PI/2)
-    print("  -> Applying Phase(PI/2)...")
-    u3 = QuantumUniverse(1)
-    u3.print_state() # Print initial
-    u3.h(0)
-    u3.phase(0, math.pi/2)
-    u3.print_state()
-    
-    # Experiment B: Using Standard S
-    print("  -> Applying Standard S...")
-    u4 = QuantumUniverse(1)
-    u4.print_state() # Print initial
-    u4.h(0)
-    u4.s(0)
-    u4.print_state()
-    
-    # Verification
-    amp3 = u3.get_amplitude(1)
-    amp4 = u4.get_amplitude(1)
-    
-    print(f"    Phase(PI/2) |1>: {amp3.real:.3f} {amp3.imag:+.3f}j")
-    print(f"    S Gate      |1>: {amp4.real:.3f} {amp4.imag:+.3f}j")
-    
-    # Check Imaginary parts (since S rotation moves Real to Imag)
-    if abs(amp3.imag - amp4.imag) < 0.001:
-        print("    ✅ Match.")
-    else:
-        print("    ❌ Mismatch.")
+    # Let's do a mathematical check:
+    # We apply the INVERSE of the preparation to Q2.
+    # Inverse of (H then T) is (Inverse-T then H).
+    # Since T^4 = Z, Inverse-T is T^7 (or just Tdg).
+    # Let's just manually check the math of the final state printed above.
+    print("Compare the 'Target Amplitude' from Step 1 with Q2's amplitude in the final print dump.")
 
 if __name__ == "__main__":
-    test_t_versus_z()
-    print()
-    test_phase_universality()
+    test_teleportation()

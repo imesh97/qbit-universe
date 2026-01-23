@@ -1,0 +1,22 @@
+COMMAND REFERENCE
+
+# Initialization & IO
+qreg name[size]       -> Initialize Universe (size = integer)
+measure q[i] -> c[j]  -> Measure qubit [i]
+
+# Single Qubit Gates
+h q[i]                -> Hadamard Gate
+x q[i]                -> Pauli-X (NOT)
+y q[i]                -> Pauli-Y
+z q[i]                -> Pauli-Z
+s q[i]                -> S Gate (Phase 90°)
+t q[i]                -> T Gate (Phase 45°)
+
+# Multi Qubit Gates
+cx q[c], q[t]         -> Controlled-NOT (Control, Target)
+cz q[c], q[t]         -> Controlled-Z
+swap q[a], q[b]       -> Swap two qubits
+
+# Parametric Gates
+rx (theta) q[i]        -> X-axis Rotation (theta = float)
+phase (lambda) q[i]    -> Phase Gate (lambda = float)

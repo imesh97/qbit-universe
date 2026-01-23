@@ -19,7 +19,7 @@ We have a test suite in `tests/`. Try the OpenQASM parser too!
 # Installation
 
 ```bash
-git clone https://github.com/imesh97/qbit-universe.git
+git clone https://github.com/imesh97/qbitUni.git
 ```
 
 # Setup

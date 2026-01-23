@@ -1,4 +1,5 @@
 from qbitUni import QuantumUniverse
+from qbitUni.visuals import print_bloch_vector, plot_histogram
 import math
 
 def test_teleportation():
@@ -45,17 +46,15 @@ def test_teleportation():
     # but the quantum information is projected onto Bob's qubit (Q2).
     bit0 = u.measure_qubit(0)
     bit1 = u.measure_qubit(1)
-    
     print(f"    Alice Measured: {bit1}{bit0} (Binary)")
+    plot_histogram([u.get_prob(i) for i in range(8)])
     
     # --- STEP 4: BOB'S CORRECTION (CLASSICAL FEEDBACK) ---
     # Bob applies specific gates to Q2 based on the bits Alice sent him.
     print("\n4. Bob applies corrections based on Alice's bits...")
-    
     if bit1 == 1:
         print("    -> Applying X (Bit Flip)")
         u.x(2)
-        
     if bit0 == 1:
         print("    -> Applying Z (Phase Flip)")
         u.z(2)
@@ -70,9 +69,16 @@ def test_teleportation():
     # To prove Q2 holds the secret, we apply the INVERSE of the preparation steps.
     # Preparation was: H -> T
     # Inverse is: Inverse-T -> Inverse-H
+    idx_q2_0 = (0 << 2) | (bit1 << 1) | bit0
+    idx_q2_1 = (1 << 2) | (bit1 << 1) | bit0
+    amp_q2_0 = u.get_amplitude(idx_q2_0)
+    amp_q2_1 = u.get_amplitude(idx_q2_1)
+
+    print_bloch_vector(amp_q2_0, amp_q2_1)
     
-    u.phase(2, -math.pi/4) # Reverse T (Using Phase Gate with -PI/4)
+    u.phase(2, (-1) * math.pi/4) # Reverse T (Using Phase Gate with -PI/4)
     u.h(2) # Reverse H (H is its own inverse)
+    u.print_state()
     
     # If Q2 held the correct state, uncomputing it must result in exactly |0>.
     # If we measure 1, the teleportation failed.
@@ -85,7 +91,7 @@ def test_teleportation():
     
     print("\n✅ TELEPORTATION COMPLETE.")
 
-    # --- MANUAL VERIFICATION NOTES (For the math curious) ---
+    # --- MANUAL VERIFICATION NOTES (-for the mathematically curious-) ---
     # We check the amplitude of the state where Q2=1 (from Step 5).
     # Depending on the random collapse of Q0/Q1, the index will change.
     # If Alice measured 00, we check index 0b100 (4)

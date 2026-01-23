@@ -1,6 +1,7 @@
 # T^4 = Z
 
 from qbitUni import QuantumUniverse
+from qbitUni.visuals import print_bloch_vector
 import math
 
 def test_t_versus_z():
@@ -15,12 +16,18 @@ def test_t_versus_z():
     print("\n🧪 Experiment A: Applying T four times")
 
     u_t.h(0) # Start in Superposition |+>
+    print("   [Visual] Start (|0> + |1>):") 
+    print_bloch_vector(u_t.get_amplitude(0), u_t.get_amplitude(1))
+
+    print("   Applying T -> T -> T -> T")
     u_t.t(0) # Apply T four times (45° * 4 = 180°)
     u_t.t(0)
     u_t.t(0)
     u_t.t(0)
     
     u_t.print_state() # Print state after T^4 test
+    print("   [Visual] End (Should be |0> - |1>):")
+    print_bloch_vector(u_t.get_amplitude(0), u_t.get_amplitude(1))
     
     # --- EXPERIMENT B: The Z-Gate Baseline ---
     print("\n🧪 Experiment B: Applying Z once (Control Group)")
@@ -30,6 +37,8 @@ def test_t_versus_z():
     u_z.z(0) # Apply Z once (180°)
     
     u_z.print_state() # Print state after Z test
+    print("   [Visual] End (Z Gate):")
+    print_bloch_vector(u_z.get_amplitude(0), u_z.get_amplitude(1))
     
     # --- MATHEMATICAL VERIFICATION ---
     print("\n📊 Verification Analysis")
@@ -65,17 +74,27 @@ def test_phase_universality():
     print("  -> Applying Phase(PI)...")
     u1 = QuantumUniverse(1)
     u1.print_state() # Print initial
+    print("   [Visual] End (Z Gate):")
+    print_bloch_vector(u1.get_amplitude(0), u1.get_amplitude(1))
+
     u1.h(0)
     u1.phase(0, math.pi)
     u1.print_state()  # Print state
+    print("   [Visual] End (Z Gate):")
+    print_bloch_vector(u1.get_amplitude(0), u1.get_amplitude(1))
     
     # Experiment B: Using Standard Z
     print("  -> Applying Standard Z...")
     u2 = QuantumUniverse(1)
     u2.print_state() # Print initial
+    print("   [Visual] End (Z Gate):")
+    print_bloch_vector(u2.get_amplitude(0), u2.get_amplitude(1))
+
     u2.h(0)
     u2.z(0)
     u2.print_state()  # Print state
+    print("   [Visual] End (Z Gate):")
+    print_bloch_vector(u2.get_amplitude(0), u2.get_amplitude(1))
     
     # Verification
     amp1 = u1.get_amplitude(1)
@@ -97,17 +116,27 @@ def test_phase_universality():
     print("  -> Applying Phase(PI/2)...")
     u3 = QuantumUniverse(1)
     u3.print_state() # Print initial
+    print("   [Visual] End (Z Gate):")
+    print_bloch_vector(u3.get_amplitude(0), u3.get_amplitude(1))
+
     u3.h(0)
     u3.phase(0, math.pi/2)
     u3.print_state()
+    print("   [Visual] End (Z Gate):")
+    print_bloch_vector(u3.get_amplitude(0), u3.get_amplitude(1))
     
     # Experiment B: Using Standard S
     print("  -> Applying Standard S...")
     u4 = QuantumUniverse(1)
     u4.print_state() # Print initial
+    print("   [Visual] End (Z Gate):")
+    print_bloch_vector(u4.get_amplitude(0), u4.get_amplitude(1))
+
     u4.h(0)
     u4.s(0)
     u4.print_state()
+    print("   [Visual] End (Z Gate):")
+    print_bloch_vector(u4.get_amplitude(0), u4.get_amplitude(1))
     
     # Verification
     amp3 = u3.get_amplitude(1)

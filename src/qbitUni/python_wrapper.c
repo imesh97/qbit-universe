@@ -2,6 +2,7 @@
 #include <Python.h>
 #include <complex.h>
 #include "universe.h"
+#include "science.h"
 #include "gates.h"
 #include "utils.h"
 
@@ -153,6 +154,23 @@ static PyObject* Py_measure_qubit(PyQuantumUniverse *self, PyObject *args) {
     return PyLong_FromLong(result);
 }
 
+static PyObject* Py_apply_noise(PyQuantumUniverse *self, PyObject *args) {
+    int target;
+    double prob;
+    if (!PyArg_ParseTuple(args, "id", &target, &prob)) return NULL;
+    
+    apply_noise(self->univ, target, prob);
+    Py_RETURN_NONE;
+}
+
+static PyObject* Py_get_expectation(PyQuantumUniverse *self, PyObject *args) {
+    int target;
+    if (!PyArg_ParseTuple(args, "i", &target)) return NULL;
+    
+    double val = get_expectation(self->univ, target);
+    return Py_BuildValue("d", val);
+}
+
 static PyObject* Py_print_state(PyQuantumUniverse *self) {
     print_state(self->univ);
     Py_RETURN_NONE;
@@ -175,6 +193,8 @@ static PyMethodDef PyQuantumUniverse_methods[] = {
     {"get_prob", (PyCFunction)Py_get_prob, METH_VARARGS, "Get probability at index"},
     {"measure_all", (PyCFunction)Py_measure_all, METH_NOARGS, "Collapse and measure the universe"},
     {"measure_qubit", (PyCFunction)Py_measure_qubit, METH_VARARGS, "Collapse and measure a single qubit"},
+    {"apply_noise", (PyCFunction)Py_apply_noise, METH_VARARGS, "Apply depolarizing noise to a qubit"},
+    {"get_expectation", (PyCFunction)Py_get_expectation, METH_VARARGS, "Get <Z> expectation value of a qubit"},
     {"print_state", (PyCFunction)Py_print_state, METH_NOARGS, "Print the state of the universe"},
     {NULL, NULL, 0, NULL}
 };

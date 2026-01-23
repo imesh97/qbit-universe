@@ -8,16 +8,31 @@
 #ifdef _WIN32
   #include <windows.h>
   typedef HANDLE ThreadType;
-  static int get_cores() { SYSTEM_INFO s; GetSystemInfo(&s); return s.dwNumberOfProcessors; }
 #else
   #include <pthread.h>
   #include <unistd.h>
   typedef pthread_t ThreadType;
-  static int get_cores() {
-      long n = sysconf(_SC_NPROCESSORS_ONLN); 
-      return (n > 0) ? (int)n : 1; // fallback to 1 core if sysconf fails
-  }
 #endif
+
+// --- GET CORES (if env var) ---
+static int get_cores() {
+    // A. Override to Environment Variable
+    const char* env = getenv("THREADS");
+    if (env) {
+        int n = atoi(env);
+        if (n > 0) return n;
+    }
+
+    // B. Fallback to Hardware Detection
+    #ifdef _WIN32
+        SYSTEM_INFO s; 
+        GetSystemInfo(&s); 
+        return s.dwNumberOfProcessors;
+    #else
+        long n = sysconf(_SC_NPROCESSORS_ONLN); 
+        return (n > 0) ? (int)n : 1;
+    #endif
+}
 
 // --- INTERNAL STRUCTURES ---
 typedef struct { // ThreadJob ("briefcase" for each thread)

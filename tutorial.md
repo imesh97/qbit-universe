@@ -68,14 +68,14 @@ Parametric Rotations:
 qu.rx(i, theta)
     -> Rotate qubit 'i' by 'theta' radians around the X-axis.
 
-qu.phase(i, phi)
-    -> Rotate qubit 'i' by 'phi' radians around the Z-axis.
+qu.phase(i, theta)
+    -> Phase gate 'i' by 'theta' radians.
 ```
 
 Measurement:
 
 ```
-val = u.measure_qubit(i)
+val = qu.measure_qubit(i)
     -> Collapses the wavefunction of qubit 'i'.
     -> Returns an integer: 0 or 1.
 ```

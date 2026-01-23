@@ -31,6 +31,8 @@ python3 tests/teleport.py
 python3 tests/grover.py
 python3 tests/science.py
 python3 tests/visuals.py
+python3 tests/energy.py
+python3 tests/qasm/run.py
 ```
 
 ## Running your first simulation

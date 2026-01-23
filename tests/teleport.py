@@ -25,7 +25,12 @@ def test_teleportation():
     
     # Record the target amplitude for manual verification later
     amp0 = u.get_amplitude(0b001) # State |001> (Q0=1, others=0)
-    print(f"    Target Amplitude to Match: {amp0.real:.3f} {amp0.imag:+.3f}j")
+    print(f"    Target Amplitude to Match: {amp0.real:.3f} {amp0.imag:+.3f}j\n")
+    # We get amplitudes for |0> and |1> (assuming others are 0 for now)
+    # Since Q1 and Q2 are 0, we look at index 0 (|000>) and 1 (|001>)
+    a0 = u.get_amplitude(0) 
+    a1 = u.get_amplitude(1)
+    print_bloch_vector(a0, a1)
 
     # --- STEP 2: CREATE ENTANGLEMENT (THE "BRIDGE") ---
     # Alice (Q1) and Bob (Q2) share a Bell Pair.

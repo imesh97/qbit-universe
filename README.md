@@ -18,6 +18,14 @@ We have a test suite in `tests/`. Try the OpenQASM parser too!
 
 # Installation
 
+**Package:**
+
+```bash
+pip install qbitUni
+```
+
+**Repository:**
+
 ```bash
 git clone https://github.com/imesh97/qbitUni.git
 ```

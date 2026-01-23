@@ -29,6 +29,7 @@ python3 tests/xy.py
 python3 tests/parallel.py
 python3 tests/universality.py
 python3 tests/teleport.py
+python3 tests/grover.py
 ```
 
 ## Running your first simulation

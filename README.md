@@ -17,7 +17,6 @@ Create and run a virtual environment.
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
 ```
 
 # Tests
@@ -39,6 +38,7 @@ python3 tests/grover.py
 Create `script.py` file for this test.
 
 ```python
+# 📚 Import the Quantum Universe from Qbit
 from qbitUni import QuantumUniverse
 
 # ⚡ Initialize a 2-qubit Universe

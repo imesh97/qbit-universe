@@ -1,49 +1,4 @@
-# qbitUni — Quantum Universe Simulator
-
-s/o Gemini....
-
-# Installation
-
-```bash
-git clone https://github.com/imesh97/qbit-universe.git
-```
-
-# Setup
-
-**Note:** _This project uses Python 3.13._
-
-Create and run a virtual environment.
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-# Tests
-
-```bash
-python3 tests/gates.py
-python3 tests/melinda.py
-python3 tests/xy.py
-python3 tests/parallel.py
-python3 tests/universality.py
-python3 tests/teleport.py
-python3 tests/grover.py
-python3 tests/science.py
-python3 tests/visuals.py
-python3 tests/energy.py
-python3 tests/qasm/run.py
-```
-
-## Running your first simulation
-
-### Code
-
-Create `script.py` file for this test.
-
-```python
-# 📚 Import the Quantum Universe from Qbit
-import qbitUni as qu
+import qbitUni as qu  # ~main_test
 
 # ⚡ Initialize a 2-qubit Universe
 # This allocates the state vector in C memory
@@ -73,10 +28,3 @@ result = univ.measure_all()
 print(f"Final Measurement: {result:02b}")
 
 univ.print_state() # Print state after collapse
-```
-
-### Execution
-
-```bash
-python3 script.py
-```

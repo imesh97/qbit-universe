@@ -58,7 +58,7 @@ def test_large_scale_pauli():
     for i in range(0, n, 2):
         expected_pattern |= (1 << i)
         
-    res = sim.measure()
+    res = sim.measure_all()
     assert res == expected_pattern, f"Large Scale X Failed! Expected {expected_pattern:b}, Got {res:b}"
     print(f"  ✅ X-Gate Pattern Verified: |{res:b}>")
     
@@ -68,8 +68,8 @@ def test_large_scale_pauli():
     # So the whole state should flip qubit 0 to 0, and gain a -i phase.
     print("  [2/3] Applying Y to Qubit 0...")
     
-    # We need to re-initialize to the pattern state because measure() collapsed it
-    # But wait! measure() collapses to the state we found. So we are ALREADY in state |...0101>.
+    # We need to re-initialize to the pattern state because measure_all() collapsed it
+    # But wait! measure_all() collapses to the state we found. So we are ALREADY in state |...0101>.
     # So we can just proceed.
     
     sim.y(0)

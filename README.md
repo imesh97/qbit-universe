@@ -63,7 +63,7 @@ print(f"Prob of |11>: {univ.get_prob(3):.2f}")
 
 # 🌊 Collapse the Wavefunction
 # Measuring will force the universe into a single classical state
-result = univ.measure()
+result = univ.measure_all()
 print(f"Final Measurement: {result:02b}")
 
 univ.print_state() # Print state after collapse

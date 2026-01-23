@@ -114,7 +114,7 @@ static PyObject* Py_get_prob(PyQuantumUniverse *self, PyObject *args) {
     return PyFloat_FromDouble(p);
 }
 
-static PyObject* Py_measure(PyQuantumUniverse *self) {
+static PyObject* Py_measure_all(PyQuantumUniverse *self) {
     long long res = measure_all(self->univ);
     return PyLong_FromLongLong(res);
 }
@@ -149,7 +149,7 @@ static PyMethodDef PyQuantumUniverse_methods[] = {
     {"phase", (PyCFunction)Py_phase, METH_VARARGS, "Apply Phase gate (radians)"},
     {"get_amplitude", (PyCFunction)Py_get_amplitude, METH_VARARGS, "Get complex amplitude at index"},
     {"get_prob", (PyCFunction)Py_get_prob, METH_VARARGS, "Get probability at index"},
-    {"measure", (PyCFunction)Py_measure, METH_NOARGS, "Collapse and measure the universe"},
+    {"measure_all", (PyCFunction)Py_measure_all, METH_NOARGS, "Collapse and measure the universe"},
     {"measure_qubit", (PyCFunction)Py_measure_qubit, METH_VARARGS, "Collapse and measure a single qubit"},
     {"print_state", (PyCFunction)Py_print_state, METH_NOARGS, "Print the state of the universe"},
     {NULL, NULL, 0, NULL}

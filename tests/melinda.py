@@ -32,7 +32,7 @@ def test_bell_state():
         s = QuantumUniverse(2)
         s.h(0)
         s.cnot(0, 1)
-        res = f"{s.measure():02b}"
+        res = f"{s.measure_all():02b}"
         if res in ["00", "11"]:
             counts[res] += 1
         else:
@@ -56,7 +56,7 @@ def test_interference():
     sim.h(0)
     print(f"  After H:   {format_state(sim, 1)}  <-- Destructive interference on |0>")
     
-    result = sim.measure()
+    result = sim.measure_all()
     print(f"  Observed State: |{result}>")
     assert result == 1, "Interference Failed! State should be |1>."
     print("  ✅ Interference Proof: Probability of |0> is now 0.")

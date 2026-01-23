@@ -27,6 +27,7 @@ python3 tests/gates.py
 python3 tests/melinda.py
 python3 tests/xy.py
 python3 tests/parallel.py
+python3 tests/teleport.py
 ```
 
 ## Running your first simulation

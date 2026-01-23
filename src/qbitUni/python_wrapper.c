@@ -3,6 +3,7 @@
 #include <complex.h>
 #include "universe.h"
 #include "gates.h"
+#include "utils.h"
 
 // 1. The Object Structure
 typedef struct {
@@ -74,7 +75,7 @@ static PyObject* Py_y(PyQuantumUniverse *self, PyObject *args) {
     Py_RETURN_NONE;
 }
 
-// 5. Data Retrieval Methods (Fixes your Test Error)
+// 5. Data Retrieval Methods
 static PyObject* Py_get_amplitude(PyQuantumUniverse *self, PyObject *args) {
     long long index;
     if (!PyArg_ParseTuple(args, "L", &index)) return NULL;
@@ -101,6 +102,11 @@ static PyObject* Py_measure(PyQuantumUniverse *self) {
     return PyLong_FromLongLong(res);
 }
 
+static PyObject* Py_print_state(PyQuantumUniverse *self) {
+    print_state(self->univ);
+    Py_RETURN_NONE;
+}
+
 // 6. Method Table
 static PyMethodDef PyQuantumUniverse_methods[] = {
     {"h", (PyCFunction)Py_h, METH_VARARGS, "Apply Hadamard gate (Superposition)"},
@@ -112,6 +118,7 @@ static PyMethodDef PyQuantumUniverse_methods[] = {
     {"get_amplitude", (PyCFunction)Py_get_amplitude, METH_VARARGS, "Get complex amplitude at index"},
     {"get_prob", (PyCFunction)Py_get_prob, METH_VARARGS, "Get probability at index"},
     {"measure", (PyCFunction)Py_measure, METH_NOARGS, "Collapse and measure the universe"},
+    {"print_state", (PyCFunction)Py_print_state, METH_NOARGS, "Print the state of the universe"},
     {NULL, NULL, 0, NULL}
 };
 

@@ -7,6 +7,7 @@ qbit_extension = Extension(
         'src/qbitUni/gates.c',
         'src/qbitUni/gates_kernel.c',
         'src/qbitUni/thread.c',
+        'src/qbitUni/utils.c',
         'src/qbitUni/python_wrapper.c'
     ],
     include_dirs=['src/qbitUni'],

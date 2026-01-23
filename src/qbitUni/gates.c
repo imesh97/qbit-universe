@@ -11,6 +11,9 @@ extern void kernel_s(Universe *u, int target, int control, double param, long lo
 extern void kernel_t(Universe *u, int target, int control, double param, long long start, long long end); 
 extern void kernel_cnot(Universe *u, int target, int control, double param, long long start, long long end);
 extern void kernel_phase(Universe *u, int target, int control, double param, long long start, long long end);
+extern void kernel_swap(Universe *u, int target, int control, double param, long long start, long long end);
+extern void kernel_cz(Universe *u, int target, int control, double param, long long start, long long end);
+extern void kernel_toffoli(Universe *u, int target, int control, double param, long long start, long long end);
 
 // --- PUBLIC API ---
 void apply_hadamard(Universe *u, int target) {
@@ -43,4 +46,16 @@ void apply_cnot(Universe *u, int control, int target) {
 
 void apply_phase(Universe *u, int target, double angle_radians) {
     dispatch_parallel(u, kernel_phase, target, -1, angle_radians); // Pass angle!
+}
+
+void apply_swap(Universe *u, int q1, int q2) {
+    dispatch_parallel(u, kernel_swap, q1, q2, 0.0);
+}
+
+void apply_cz(Universe *u, int control, int target) {
+    dispatch_parallel(u, kernel_cz, target, control, 0.0);
+}
+
+void apply_toffoli(Universe *u, int control1, int control2, int target) {
+    dispatch_parallel(u, kernel_toffoli, target, control1, (double)control2); // Pass control2
 }

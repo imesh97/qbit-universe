@@ -92,6 +92,27 @@ static PyObject* Py_phase(PyQuantumUniverse *self, PyObject *args) {
     Py_RETURN_NONE;
 }
 
+static PyObject* Py_swap(PyQuantumUniverse *self, PyObject *args) {
+    int q1, q2;
+    if (!PyArg_ParseTuple(args, "ii", &q1, &q2)) return NULL;
+    apply_swap(self->univ, q1, q2);
+    Py_RETURN_NONE;
+}
+
+static PyObject* Py_cz(PyQuantumUniverse *self, PyObject *args) {
+    int c, t;
+    if (!PyArg_ParseTuple(args, "ii", &c, &t)) return NULL;
+    apply_cz(self->univ, c, t);
+    Py_RETURN_NONE;
+}
+
+static PyObject* Py_toffoli(PyQuantumUniverse *self, PyObject *args) {
+    int c1, c2, t;
+    if (!PyArg_ParseTuple(args, "iii", &c1, &c2, &t)) return NULL;
+    apply_toffoli(self->univ, c1, c2, t);
+    Py_RETURN_NONE;
+}
+
 // 5. Data Retrieval Methods
 static PyObject* Py_get_amplitude(PyQuantumUniverse *self, PyObject *args) {
     long long index;
@@ -147,6 +168,9 @@ static PyMethodDef PyQuantumUniverse_methods[] = {
     {"x", (PyCFunction)Py_x, METH_VARARGS, "Apply Pauli-X gate (NOT)"},
     {"y", (PyCFunction)Py_y, METH_VARARGS, "Apply Pauli-Y gate (Complex Swap)"},
     {"phase", (PyCFunction)Py_phase, METH_VARARGS, "Apply Phase gate (radians)"},
+    {"swap", (PyCFunction)Py_swap, METH_VARARGS, "Apply Swap gate (control, target)"},
+    {"cz", (PyCFunction)Py_cz, METH_VARARGS, "Apply CZ gate (control, target)"},
+    {"toffoli", (PyCFunction)Py_toffoli, METH_VARARGS, "Apply Toffoli gate (control1, control2, target)"},
     {"get_amplitude", (PyCFunction)Py_get_amplitude, METH_VARARGS, "Get complex amplitude at index"},
     {"get_prob", (PyCFunction)Py_get_prob, METH_VARARGS, "Get probability at index"},
     {"measure_all", (PyCFunction)Py_measure_all, METH_NOARGS, "Collapse and measure the universe"},

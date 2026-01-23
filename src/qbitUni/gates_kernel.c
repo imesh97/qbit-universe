@@ -120,3 +120,62 @@ void kernel_phase(Universe *u, int target, int control, double param, long long 
         }
     }
 }
+
+void kernel_swap(Universe *u, int target, int control, double param, long long start, long long end) {
+    long long bit_a = 1LL << target;  // "Target" as Qubit A
+    long long bit_b = 1LL << control; // "Control" as Qubit B (reused parameter)
+    
+    for (long long i = start; i < end; i++) {
+        // We only swap if the bits are DIFFERENT (01 swaps with 10)
+        // If they are 00 or 11, swapping does nothing.
+        int val_a = (i & bit_a) != 0;
+        int val_b = (i & bit_b) != 0;
+        
+        if (val_a != val_b) {
+            // Check to ensure we only swap once (e.g., when we encounter the smaller index)
+            // Calculate the partner index 'j'. Only swap if i < j.
+            
+            long long j = i ^ bit_a ^ bit_b; // Construct partner index 'j' by flipping both bits
+            
+            if (i < j) {
+                double complex temp = u->psi[i];
+                u->psi[i] = u->psi[j];
+                u->psi[j] = temp;
+            }
+        }
+    }
+}
+
+void kernel_cz(Universe *u, int target, int control, double param, long long start, long long end) {
+    long long bit_t = 1LL << target;
+    long long bit_c = 1LL << control;
+    long long mask = bit_t | bit_c;
+
+    for (long long i = start; i < end; i++) {
+        if ((i & mask) == mask) { // If both bits are 1
+            u->psi[i] = -u->psi[i];
+        }
+    }
+}
+
+void kernel_toffoli(Universe *u, int target, int control, double param, long long start, long long end) {
+    int control2 = (int)param; // Hack: Cast double back to int
+    
+    long long t_bit = 1LL << target;
+    long long c1_bit = 1LL << control;
+    long long c2_bit = 1LL << control2;
+    
+    long long mask = c1_bit | c2_bit;
+
+    for (long long i = start; i < end; i++) {
+        
+        if ((i & mask) == mask) { // If both controls are 1...
+            if (!(i & t_bit)) { // ... we act on the target (avoid double swap logic)
+                long long j = i | t_bit;
+                double complex temp = u->psi[i];
+                u->psi[i] = u->psi[j];
+                u->psi[j] = temp;
+            }
+        }
+    }
+}

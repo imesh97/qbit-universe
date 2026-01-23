@@ -4,22 +4,16 @@ from qbitUni.visuals import plot_histogram
 from scipy.optimize import minimize
 import math
 
-def vqe_ansatz(theta, u):
-    """Creates a trial wavefunction based on angle theta"""
-    u.h(0)
+def vqe_ansatz(u, theta):
+    """Creates a trial wavefunction based on angle theta via Rx gate"""
     u.rx(0, theta)
     
-    plot_histogram([u.measure_qubit(i) for i in range(0)])
-    plot_histogram([u.measure_qubit(i) for i in range(8)])
-
-def cost_function(theta):
+def cost_function(theta_list):
     """Returns the energy <Z> for a given angle"""
-    u = QuantumUniverse(8)
+    u = QuantumUniverse(1)
     
-    # 1. Fake Rx gate (Hadamard sandwich) -[{ $$R_x(\theta) \approx H \cdot Phase(\theta) \cdot H$$ }]-
-    u.h(0) 
-    u.phase(0, theta[0]) # Using Phase as a tunable parameter
-    u.h(0)
+    val = theta_list[0] # Extract float from list
+    vqe_ansatz(u, val)
     
     # 2. Measure Energy (Expectation of Hamiltonian)
     # E = <Z>
@@ -35,15 +29,21 @@ def run_vqe():
     
     # Classical Optimizer drives the Quantum Engine
     result = minimize(cost_function, initial_guess, method='COBYLA', tol=1e-4)
-    
+    optimal_theta = result.x[0]
+
     print("\n✅ Optimization Complete!")
     print(f"   Ground State Energy: {result.fun:.4f} (Should be near -1.0)")
-    print(f"   Optimal Angle:       {result.x[0]:.4f} rads")
+    print(f"   Optimal Angle:       {optimal_theta:.4f} rads")
     print(f"   -- Note: {math.pi:.4f} rads is PI --")
 
-if __name__ == "__main__":
-    u = QuantumUniverse(8)
-    theta = 3.0
+    # Visualize the Final Result
+    print("\n📊 Visualizing Resulting State...")
+    u_final = QuantumUniverse(1)
+    vqe_ansatz(u_final, optimal_theta)
+    
+    # Get PROBABILITIES (non-destructive) instead of measuring
+    probs = [u_final.get_prob(0), u_final.get_prob(1)]
+    plot_histogram(probs)
 
-    vqe_ansatz(theta, u)
+if __name__ == "__main__":
     run_vqe()

@@ -1,6 +1,20 @@
 # qbitUni — Quantum Universe Simulator
 
-s/o Gemini....
+_s/o Gemini...._
+
+# About
+
+qbitUni (qu) is a quantum simulator that allows you to simulate a quantum environment locally -- with operations. We use a C engine to perform the quantum operations and a Python wrapper to interface.
+
+We have a test suite in `tests/`. Try the OpenQASM parser too!
+
+## 🚀 Features
+
+- **Core Engine:** Written in C with multithreading.
+- **Universality:** Supports all standard gates (H, X, Y, Z, S, T, CNOT, CZ, Toffoli, RX, Phase).
+- **Scientific Tools:** Expectation Value `<Z>` calculation and Noise Simulation for VQE. Benchmarks, too.
+- **Compatibility:** Includes an OpenQASM 2.0 parser.
+- **Visualization:** Built-in ASCII Bloch Spheres and Histograms.
 
 # Installation
 
@@ -19,7 +33,7 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-# Tests
+# Test Suite
 
 ```bash
 python3 tests/gates.py
@@ -33,11 +47,13 @@ python3 tests/science.py
 python3 tests/visuals.py
 python3 tests/energy.py
 python3 tests/qasm/run.py
+
+python3 tests/benchmark.py
 ```
 
 ## Running your first simulation
 
-### Code
+### 1. Code
 
 Create `script.py` file for this test.
 
@@ -75,7 +91,7 @@ print(f"Final Measurement: {result:02b}")
 univ.print_state() # Print state after collapse
 ```
 
-### Execution
+### 2. Execute
 
 ```bash
 python3 script.py

@@ -12,7 +12,7 @@ git clone https://github.com/imesh97/qbit-universe.git
 
 **Note:** _This project uses Python 3.13._
 
-_Create and run a virtual environment_
+Create and run a virtual environment.
 
 ```bash
 python3 -m venv venv
@@ -25,11 +25,15 @@ pip install -r requirements.txt
 ```bash
 python3 tests/gates.py
 python3 tests/melinda.py
+python3 tests/xy.py
+python3 tests/parallel.py
 ```
 
 ## Running your first simulation
 
 ### Code
+
+Create `script.py` file for this test.
 
 ```python
 from qbitUni import QuantumUniverse
@@ -37,15 +41,19 @@ from qbitUni import QuantumUniverse
 # ⚡ Initialize a 2-qubit Universe
 # This allocates the state vector in C memory
 univ = QuantumUniverse(2)
+univ.print_state() # Print initial state
+# (Notice the |00> state only -- as the other |01>, |10>, |11> are all 0 -- we only print probabilities > 0.01%)
 
 # ⊹ Apply a Hadamard gate to Qubit 0
 # This puts Qubit 0 into a 50/50 superposition of |0> and |1>
 univ.h(0)
+univ.print_state() # Print state after Hadamard
 
 # 🎛️ Apply a CNOT (Controlled-NOT) gate
 # Control: Qubit 0, Target: Qubit 1
 # This 'links' the two qubits together (Entanglement)
 univ.cnot(0, 1)
+univ.print_state() # Print state after CNOT
 
 # 🧮 Peek at the Math
 # Check the probability of the universe being in state |00> or |11>
@@ -56,6 +64,8 @@ print(f"Prob of |11>: {univ.get_prob(3):.2f}")
 # Measuring will force the universe into a single classical state
 result = univ.measure()
 print(f"Final Measurement: {result:02b}")
+
+univ.print_state() # Print state after collapse
 ```
 
 ### Execution

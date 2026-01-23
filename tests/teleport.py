@@ -1,8 +1,10 @@
 # T^4 = Z
 
 from qbitUni import QuantumUniverse
+import math
 
 def test_t_versus_z():
+    print("====================================")
     print("🔮 UNIVERSALITY CHECK: T^4 vs Z Gate")
     print("====================================")
     
@@ -51,5 +53,76 @@ def test_t_versus_z():
     else:
         print(f"\n❌ FAILURE: Mismatch detected. Diff: {diff_real}")
 
+def test_phase_universality():
+    print("================================")
+    print("🎨 Testing Parametric Phase Gate")
+    print("================================")
+    
+    # --- CASE 1: Phase(PI) vs Z ---
+    print("\n[1] Checking if Phase(PI) == Z...")
+    
+    # Experiment A: Using Phase(PI)
+    print("  -> Applying Phase(PI)...")
+    u1 = QuantumUniverse(1)
+    u1.print_state() # Print initial
+    u1.h(0)
+    u1.phase(0, math.pi)
+    u1.print_state()  # Print state
+    
+    # Experiment B: Using Standard Z
+    print("  -> Applying Standard Z...")
+    u2 = QuantumUniverse(1)
+    u2.print_state() # Print initial
+    u2.h(0)
+    u2.z(0)
+    u2.print_state()  # Print state
+    
+    # Verification
+    amp1 = u1.get_amplitude(1)
+    amp2 = u2.get_amplitude(1)
+    
+    print(f"    Phase(PI) |1>: {amp1.real:.3f} {amp1.imag:+.3f}j")
+    print(f"    Z Gate    |1>: {amp2.real:.3f} {amp2.imag:+.3f}j")
+    
+    # Check Real parts (since PI rotation flips real sign)
+    if abs(amp1.real - amp2.real) < 0.001:
+        print("    ✅ Match.")
+    else:
+        print("    ❌ Mismatch.")
+
+    # --- CASE 2: Phase(PI/2) vs S ---
+    print("\n[2] Checking if Phase(PI/2) == S...")
+    
+    # Experiment A: Using Phase(PI/2)
+    print("  -> Applying Phase(PI/2)...")
+    u3 = QuantumUniverse(1)
+    u3.print_state() # Print initial
+    u3.h(0)
+    u3.phase(0, math.pi/2)
+    u3.print_state()
+    
+    # Experiment B: Using Standard S
+    print("  -> Applying Standard S...")
+    u4 = QuantumUniverse(1)
+    u4.print_state() # Print initial
+    u4.h(0)
+    u4.s(0)
+    u4.print_state()
+    
+    # Verification
+    amp3 = u3.get_amplitude(1)
+    amp4 = u4.get_amplitude(1)
+    
+    print(f"    Phase(PI/2) |1>: {amp3.real:.3f} {amp3.imag:+.3f}j")
+    print(f"    S Gate      |1>: {amp4.real:.3f} {amp4.imag:+.3f}j")
+    
+    # Check Imaginary parts (since S rotation moves Real to Imag)
+    if abs(amp3.imag - amp4.imag) < 0.001:
+        print("    ✅ Match.")
+    else:
+        print("    ❌ Mismatch.")
+
 if __name__ == "__main__":
     test_t_versus_z()
+    print()
+    test_phase_universality()

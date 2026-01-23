@@ -110,9 +110,9 @@ void kernel_cnot(Universe *u, int target, int control, double param, long long s
     }
 }
 
-void kernel_phase(Universe *u, int target, int control, double param, long long start, long long end, double angle) {
+void kernel_phase(Universe *u, int target, int control, double param, long long start, long long end) {
     long long bit = 1LL << target;
-    double complex phase_factor = cexp(I * angle); // Euler's formula (e^iθ)
+    double complex phase_factor = cexp(I * param); // Euler's formula (e^iθ)
 
     for (long long i = start; i < end; i++) {
         if (i & bit) {

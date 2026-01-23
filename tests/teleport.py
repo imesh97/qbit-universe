@@ -33,6 +33,10 @@ def test_teleportation():
     u.h(1)
     u.cnot(1, 2)
     u.print_state()
+    # Show the Probability Distribution
+    print("   📊 System State (Entanglement Created):")
+    probs = [u.get_prob(i) for i in range(8)] # Get probs for first 8 states (2^3)
+    plot_histogram(probs)
     
     # --- STEP 3: ALICE'S BELL MEASUREMENT ---
     # Alice performs a Bell Basis measurement on her two qubits (Q0 & Q1).

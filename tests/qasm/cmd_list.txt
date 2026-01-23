@@ -15,6 +15,7 @@ t q[i]                -> T Gate (Phase 45°)
 # Multi Qubit Gates
 cx q[c], q[t]         -> Controlled-NOT (Control, Target)
 cz q[c], q[t]         -> Controlled-Z
+ccx q[c], q[c], q[t]  -> Toffoli Gate (Control1, Control2, Target)
 swap q[a], q[b]       -> Swap two qubits
 
 # Parametric Gates

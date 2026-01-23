@@ -68,7 +68,7 @@ class QASMParser:
         gate_map = {
             'h': 'h', 'x': 'x', 'y': 'y', 'z': 'z', 
             's': 's', 't': 't', 'cx': 'cnot', 'cz': 'cz',
-            'swap': 'swap', 'rx': 'rx', 'phase': 'phase'
+            'swap': 'swap', 'rx': 'rx', 'phase': 'phase', 'ccx': 'toffoli',
         }
         
         # Regex will now find ALL indices in the string

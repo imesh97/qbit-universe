@@ -14,6 +14,7 @@ extern void kernel_phase(Universe *u, int target, int control, double param, lon
 extern void kernel_swap(Universe *u, int target, int control, double param, long long start, long long end);
 extern void kernel_cz(Universe *u, int target, int control, double param, long long start, long long end);
 extern void kernel_toffoli(Universe *u, int target, int control, double param, long long start, long long end);
+extern void kernel_rx(Universe *u, int target, int control, double param, long long start, long long end);
 
 // --- PUBLIC API ---
 void apply_hadamard(Universe *u, int target) {
@@ -58,4 +59,8 @@ void apply_cz(Universe *u, int control, int target) {
 
 void apply_toffoli(Universe *u, int control1, int control2, int target) {
     dispatch_parallel(u, kernel_toffoli, target, control1, (double)control2); // Pass control2
+}
+
+void apply_rx(Universe *u, int target, double angle_radians) {
+    dispatch_parallel(u, kernel_rx, target, -1, angle_radians); // Pass angle!
 }

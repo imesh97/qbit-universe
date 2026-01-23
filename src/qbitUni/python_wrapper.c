@@ -114,6 +114,15 @@ static PyObject* Py_toffoli(PyQuantumUniverse *self, PyObject *args) {
     Py_RETURN_NONE;
 }
 
+static PyObject* Py_rx(PyQuantumUniverse *self, PyObject *args) {
+    int target;
+    double angle;
+    if (!PyArg_ParseTuple(args, "id", &target, &angle)) return NULL;
+    
+    apply_rx(self->univ, target, angle);
+    Py_RETURN_NONE;
+}
+
 // 5. Data Retrieval Methods
 static PyObject* Py_get_amplitude(PyQuantumUniverse *self, PyObject *args) {
     long long index;
@@ -189,6 +198,7 @@ static PyMethodDef PyQuantumUniverse_methods[] = {
     {"swap", (PyCFunction)Py_swap, METH_VARARGS, "Apply Swap gate (control, target)"},
     {"cz", (PyCFunction)Py_cz, METH_VARARGS, "Apply CZ gate (control, target)"},
     {"toffoli", (PyCFunction)Py_toffoli, METH_VARARGS, "Apply Toffoli gate (control1, control2, target)"},
+    {"rx", (PyCFunction)Py_rx, METH_VARARGS, "Apply Rx gate (radians)"},
     {"get_amplitude", (PyCFunction)Py_get_amplitude, METH_VARARGS, "Get complex amplitude at index"},
     {"get_prob", (PyCFunction)Py_get_prob, METH_VARARGS, "Get probability at index"},
     {"measure_all", (PyCFunction)Py_measure_all, METH_NOARGS, "Collapse and measure the universe"},

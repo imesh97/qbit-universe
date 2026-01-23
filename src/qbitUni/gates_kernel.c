@@ -179,3 +179,27 @@ void kernel_toffoli(Universe *u, int target, int control, double param, long lon
         }
     }
 }
+
+void kernel_rx(Universe *u, int target, int control, double param, long long start, long long end) {
+    long long bit = 1LL << target;
+    
+    // Precompute rotation factors
+    double c = cos(param / 2.0); // cos(theta/2)
+    double complex s = -I * sin(param / 2.0); // -i * sin(theta/2)
+
+    for (long long i = start; i < end; i++) {
+        // We only process the "0" side of the target bit to avoid double-counting
+        if (!(i & bit)) {
+            long long j = i | bit; // The corresponding "1" state index
+
+            double complex amp0 = u->psi[i];
+            double complex amp1 = u->psi[j];
+
+            // Matrix multiplication
+            // New|0> = cos*|0> - i*sin*|1>
+            // New|1> = -i*sin*|0> + cos*|1>
+            u->psi[i] = (c * amp0) + (s * amp1);
+            u->psi[j] = (s * amp0) + (c * amp1);
+        }
+    }
+}

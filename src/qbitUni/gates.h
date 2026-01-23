@@ -14,5 +14,6 @@ void apply_phase(Universe *u, int target, double angle_radians);
 void apply_swap(Universe *u, int q1, int q2);
 void apply_cz(Universe *u, int control, int target);
 void apply_toffoli(Universe *u, int control1, int control2, int target);
+void apply_rx(Universe *u, int target, double angle_radians);
 
 #endif

@@ -18,5 +18,5 @@ cz q[c], q[t]         -> Controlled-Z
 swap q[a], q[b]       -> Swap two qubits
 
 # Parametric Gates
-rx (theta) q[i]        -> X-axis Rotation (theta = float)
-phase (lambda) q[i]    -> Phase Gate (lambda = float)
+rx (theta) q[i]       -> X-axis Rotation (theta = float)
+phase (lambda) q[i]   -> Phase Gate (lambda = float)

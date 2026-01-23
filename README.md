@@ -93,6 +93,14 @@ univ.print_state() # Print state after collapse
 
 ### 2. Execute
 
+**Terminal:**
+
 ```bash
 python3 script.py
+```
+
+**UI Studio:**
+
+```bash
+streamlit run app.py
 ```

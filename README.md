@@ -4,7 +4,7 @@ _s/o Gemini...._
 
 # About
 
-qbitUni (qu) is a quantum simulator that allows you to simulate a quantum environment locally -- with operations. We use a C engine to perform the quantum operations and a Python wrapper to interface.
+qbitUni (qu) is a local simulator that allows you to simulate a quantum environment, with operations. We use a C engine to perform the quantum operations and a Python wrapper to interface.
 
 We have a test suite in `tests/`. Try the OpenQASM parser too!
 

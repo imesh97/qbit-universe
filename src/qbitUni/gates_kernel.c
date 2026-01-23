@@ -5,7 +5,7 @@
 /* --- KERNEL FUNCTIONS --- */
 /* Pure math. Run in parallel later. */
 
-void kernel_hadamard(Universe *u, int target, int control, long long start, long long end) {
+void kernel_hadamard(Universe *u, int target, int control, double param, long long start, long long end) {
     double factor = 1.0 / sqrt(2.0); // Calculate the 'Normalization' factor (1/sqrt(2))
     long long bit = 1LL << target; // Identify the bit we are targeting (e.g., qubit 0 = 001)
 
@@ -23,7 +23,7 @@ void kernel_hadamard(Universe *u, int target, int control, long long start, long
     }
 }
 
-void kernel_x(Universe *u, int target, int control, long long start, long long end) {
+void kernel_x(Universe *u, int target, int control, double param, long long start, long long end) {
     long long bit = 1LL << target; 
     
     for (long long i = start; i < end; i++) {
@@ -38,7 +38,7 @@ void kernel_x(Universe *u, int target, int control, long long start, long long e
     }
 }
 
-void kernel_y(Universe *u, int target, int control, long long start, long long end) {
+void kernel_y(Universe *u, int target, int control, double param, long long start, long long end) {
     long long bit = 1LL << target;
     for (long long i = start; i < end; i++) {
         if (!(i & bit)) {
@@ -56,7 +56,7 @@ void kernel_y(Universe *u, int target, int control, long long start, long long e
     }
 }
 
-void kernel_z(Universe *u, int target, int control, long long start, long long end) {
+void kernel_z(Universe *u, int target, int control, double param, long long start, long long end) {
     long long bit = 1LL << target;
     for (long long i = start; i < end; i++) {
         if (i & bit) {
@@ -65,7 +65,7 @@ void kernel_z(Universe *u, int target, int control, long long start, long long e
     }
 }
 
-void kernel_s(Universe *u, int target, int control, long long start, long long end) {
+void kernel_s(Universe *u, int target, int control, double param, long long start, long long end) {
     long long bit = 1LL << target;
 
     for (long long i = start; i < end; i++) {
@@ -77,7 +77,7 @@ void kernel_s(Universe *u, int target, int control, long long start, long long e
     }
 }
 
-void kernel_t(Universe *u, int target, int control, long long start, long long end) {
+void kernel_t(Universe *u, int target, int control, double param, long long start, long long end) {
     long long bit = 1LL << target;
     
     // Pre-calculate the complex constant for 45 degrees
@@ -92,7 +92,7 @@ void kernel_t(Universe *u, int target, int control, long long start, long long e
     }
 }
 
-void kernel_cnot(Universe *u, int target, int control, long long start, long long end) {
+void kernel_cnot(Universe *u, int target, int control, double param, long long start, long long end) {
     long long ctrl_bit = 1LL << control;
     long long targ_bit = 1LL << target;
 
@@ -106,6 +106,17 @@ void kernel_cnot(Universe *u, int target, int control, long long start, long lon
 
             u->psi[i] = u->psi[j]; // Swap the 'stories' (amplitudes)
             u->psi[j] = temp;
+        }
+    }
+}
+
+void kernel_phase(Universe *u, int target, int control, double param, long long start, long long end, double angle) {
+    long long bit = 1LL << target;
+    double complex phase_factor = cexp(I * angle); // Euler's formula (e^iθ)
+
+    for (long long i = start; i < end; i++) {
+        if (i & bit) {
+            u->psi[i] *= phase_factor;
         }
     }
 }

@@ -39,6 +39,7 @@ typedef struct { // ThreadJob ("briefcase" for each thread)
     Universe *u;
     int target;
     int control;
+    double param;
     long long start;
     long long end;
     KernelFunc kernel; // Pointer to the specific math to run
@@ -54,13 +55,13 @@ void* generic_worker(void *arg) {
     ThreadJob *job = (ThreadJob*)arg;
     
     // Execute the math kernel
-    job->kernel(job->u, job->target, job->control, job->start, job->end);
+    job->kernel(job->u, job->target, job->control, job->param, job->start, job->end);
     
     return 0;
 }
 
 // --- THREAD DISPATCHER ---
-void dispatch_parallel(Universe *u, KernelFunc kernel, int target, int control) {
+void dispatch_parallel(Universe *u, KernelFunc kernel, int target, int control, double param) {
     int num_cores = get_cores();
     if (u->dim < 2048) num_cores = 1; // Don't thread small tasks
 
@@ -73,6 +74,7 @@ void dispatch_parallel(Universe *u, KernelFunc kernel, int target, int control) 
         jobs[i].u = u;
         jobs[i].target = target;
         jobs[i].control = control;
+        jobs[i].param = param;
         jobs[i].kernel = kernel; // Tell the thread which math to use
         jobs[i].start = i * chunk;
         jobs[i].end = (i == num_cores - 1) ? u->dim : (i + 1) * chunk;

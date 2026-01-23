@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #include "universe.h"
 
@@ -45,17 +46,16 @@ double get_probability(Universe *u, long long index) {
 
 long long measure_all(Universe *u) {
     srand(time(NULL)); // Seeds the random number generator with the current time
-    // 1. Generate a random number between 0 and 1
-    double r = (double)rand() / (double)RAND_MAX;
+    double r = (double)rand() / (double)RAND_MAX; // Generate a random number between 0 and 1
     double cumulative_prob = 0;
 
     for (long long i = 0; i < u->dim; i++) {
         double p = creal(u->psi[i])*creal(u->psi[i]) + cimag(u->psi[i])*cimag(u->psi[i]);
         cumulative_prob += p;
 
-        // 2. If the random number falls within this state's probability range
+        // If the random number falls within this state's probability range
         if (r <= cumulative_prob) {
-            // 3. COLLAPSE: Set this state to 1.0 and all others to 0.0
+            // COLLAPSE: Set this state to 1.0 and all others to 0.0
             for (long long j = 0; j < u->dim; j++) {
                 u->psi[j] = 0.0 + 0.0 * I;
             }
@@ -64,4 +64,37 @@ long long measure_all(Universe *u) {
         }
     }
     return 0;
+}
+
+int measure_qubit(Universe *u, int target) {
+    long long bit = 1LL << target;
+    double prob_1 = 0.0;
+
+    // Calculate Probability of being |1>
+    // (This loop can be parallelized with a reduction!)
+    for (long long i = 0; i < u->dim; i++) {
+        if (i & bit) {
+            prob_1 += cabs(u->psi[i]) * cabs(u->psi[i]);
+        }
+    }
+
+    // Roll the die
+    // (Using simple rand() for clarity, use safer RNG in production)
+    double r = (double)rand() / RAND_MAX;
+    int result = (r < prob_1); // 1 if we rolled below prob_1, else 0
+
+    // Collapse and Renormalize
+    double norm_factor = 1.0 / sqrt(result ? prob_1 : (1.0 - prob_1));
+
+    for (long long i = 0; i < u->dim; i++) {
+        int is_on = (i & bit) != 0;
+        
+        if (is_on == result) { // This state survives. Boost it to keep total prob = 1.0
+            u->psi[i] *= norm_factor;
+        } else { // This state dies.
+            u->psi[i] = 0;
+        }
+    }
+
+    return result;
 }

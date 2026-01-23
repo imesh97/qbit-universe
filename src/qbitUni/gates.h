@@ -10,5 +10,6 @@ void apply_s(Universe *u, int target);
 void apply_x(Universe *u, int target);
 void apply_y(Universe *u, int target);
 void apply_t(Universe *u, int target);
+void apply_phase(Universe *u, int target, double angle_radians);
 
 #endif

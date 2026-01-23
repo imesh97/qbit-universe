@@ -82,6 +82,16 @@ static PyObject* Py_t(PyQuantumUniverse *self, PyObject *args) {
     Py_RETURN_NONE;
 }
 
+static PyObject* Py_phase(PyQuantumUniverse *self, PyObject *args) {
+    int target;
+    double angle;
+    // Parse "id" = Integer (target), Double (angle)
+    if (!PyArg_ParseTuple(args, "id", &target, &angle)) return NULL;
+    
+    apply_phase(self->univ, target, angle);
+    Py_RETURN_NONE;
+}
+
 // 5. Data Retrieval Methods
 static PyObject* Py_get_amplitude(PyQuantumUniverse *self, PyObject *args) {
     long long index;
@@ -109,6 +119,19 @@ static PyObject* Py_measure(PyQuantumUniverse *self) {
     return PyLong_FromLongLong(res);
 }
 
+static PyObject* Py_measure_qubit(PyQuantumUniverse *self, PyObject *args) {
+    int target;
+    if (!PyArg_ParseTuple(args, "i", &target)) return NULL;
+
+    if (target < 0 || target >= self->univ->n_qubits) {
+        PyErr_SetString(PyExc_ValueError, "Target qubit index out of range");
+        return NULL;
+    }
+
+    int result = measure_qubit(self->univ, target);
+    return PyLong_FromLong(result);
+}
+
 static PyObject* Py_print_state(PyQuantumUniverse *self) {
     print_state(self->univ);
     Py_RETURN_NONE;
@@ -123,9 +146,11 @@ static PyMethodDef PyQuantumUniverse_methods[] = {
     {"cnot", (PyCFunction)Py_cnot, METH_VARARGS, "Apply CNOT gate (control, target)"},
     {"x", (PyCFunction)Py_x, METH_VARARGS, "Apply Pauli-X gate (NOT)"},
     {"y", (PyCFunction)Py_y, METH_VARARGS, "Apply Pauli-Y gate (Complex Swap)"},
+    {"phase", (PyCFunction)Py_phase, METH_VARARGS, "Apply Phase gate (radians)"},
     {"get_amplitude", (PyCFunction)Py_get_amplitude, METH_VARARGS, "Get complex amplitude at index"},
     {"get_prob", (PyCFunction)Py_get_prob, METH_VARARGS, "Get probability at index"},
     {"measure", (PyCFunction)Py_measure, METH_NOARGS, "Collapse and measure the universe"},
+    {"measure_qubit", (PyCFunction)Py_measure_qubit, METH_VARARGS, "Collapse and measure a single qubit"},
     {"print_state", (PyCFunction)Py_print_state, METH_NOARGS, "Print the state of the universe"},
     {NULL, NULL, 0, NULL}
 };

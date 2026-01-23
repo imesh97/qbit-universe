@@ -14,5 +14,6 @@ Universe* init_universe(int n);
 void destroy_universe(Universe *u);
 double get_probability(Universe *u, long long index);
 long long measure_all(Universe *u);
+int measure_qubit(Universe *u, int target);
 
 #endif

@@ -2,6 +2,8 @@
 
 _s/o Gemini...._
 
+[https://github.com/imesh97/qbitUni](https://github.com/imesh97/qbitUni)
+
 # About
 
 qbitUni (qu) is a local simulator that allows you to simulate a quantum environment, with operations. We use a C engine to perform the quantum operations and a Python wrapper to interface.
@@ -18,21 +20,13 @@ We have a test suite in `tests/`. Try the OpenQASM parser too!
 
 # Installation
 
-**Package:**
-
 ```bash
 pip install qbitUni
 ```
 
-**Repository:**
-
-```bash
-git clone https://github.com/imesh97/qbitUni.git
-```
-
 # Setup
 
-**Note:** _This project uses Python 3.13._
+**Note:** _This project uses Python 3.8+_
 
 Create and run a virtual environment.
 

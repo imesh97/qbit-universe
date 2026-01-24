@@ -26,7 +26,7 @@ pip install qbitUni
 
 # Setup
 
-**Note:** _This project uses Python 3.8+_
+**Note:** _This project uses Python 3.13+_
 
 Create and run a virtual environment.
 
